@@ -54,7 +54,7 @@ export default function TopBar({ onSearch }: TopBarProps) {
   const prevUnreadRef = useRef<number | null>(null);
   const router = useRouter();
 
-  // About VCNITI modal
+  // About NEXUS modal
   const [showAbout, setShowAbout] = useState(false);
   const [companyInfo, setCompanyInfo] = useState<any>(null);
   const [aboutLoading, setAboutLoading] = useState(false);
@@ -276,7 +276,7 @@ export default function TopBar({ onSearch }: TopBarProps) {
     router.push(link);
   };
 
-  // About VCNITI
+  // About NEXUS
   const openAbout = async () => {
     setShowAbout(true);
     setAboutEditing(false);
@@ -315,7 +315,7 @@ export default function TopBar({ onSearch }: TopBarProps) {
       {/* Logo */}
       <div className="flex items-center gap-3">
         <h1 className="font-display text-lg font-bold tracking-tighter">
-          <span className="text-accent">VC</span>NITI
+          <span className="text-accent">NX</span> OS
         </h1>
       </div>
 
@@ -476,13 +476,13 @@ export default function TopBar({ onSearch }: TopBarProps) {
         </div>
 
         {/* Profile / About */}
-        <button onClick={openAbout} className="w-8 h-8 border-2 border-white flex items-center justify-center text-white text-xs font-display font-bold cursor-pointer hover:bg-white hover:text-black transition-all" title="About VCNITI">
-          V
+        <button onClick={openAbout} className="w-8 h-8 border-2 border-white flex items-center justify-center text-white text-xs font-display font-bold cursor-pointer hover:bg-white hover:text-black transition-all" title="About NEXUS">
+          N
         </button>
       </div>
     </header>
 
-    {/* About VCNITI Modal */}
+    {/* About NEXUS Modal */}
     {showAbout && (
       <>
         <div className="fixed inset-0 bg-black/60 z-[1000]" onClick={() => !aboutSaving && setShowAbout(false)} />
@@ -491,9 +491,9 @@ export default function TopBar({ onSearch }: TopBarProps) {
             {/* Header */}
             <div className="p-5 border-b border-white/10 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 border-2 border-accent flex items-center justify-center text-accent text-sm font-display font-bold">V</div>
+                <div className="w-10 h-10 border-2 border-accent flex items-center justify-center text-accent text-sm font-display font-bold">N</div>
                 <div>
-                  <h2 className="text-lg font-bold text-white">{aboutEditing ? 'Edit Company Info' : (companyInfo?.name || 'VCNITI')}</h2>
+                  <h2 className="text-lg font-bold text-white">{aboutEditing ? 'Edit Company Info' : (companyInfo?.name || 'NEXUS')}</h2>
                   {!aboutEditing && companyInfo?.tagline && <p className="text-xs text-white/40">{companyInfo.tagline}</p>}
                 </div>
               </div>

@@ -44,7 +44,7 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-md brutalist-border bg-white/5 p-8 relative z-10">
         <div className="mb-8">
           <h1 className="font-display text-2xl font-bold tracking-tighter text-center">
-            <span className="text-accent">VC</span>NITI
+            <span className="text-accent">NX</span> OS
           </h1>
           <p className="text-center text-[10px] text-white/40 mt-2 uppercase tracking-[0.3em] font-display">Admin Command Center</p>
         </div>

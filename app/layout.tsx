@@ -2,8 +2,8 @@ import './globals.css';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'VCNITI Admin Dashboard',
-  description: 'Admin management dashboard for VCNITI',
+  title: 'NEXUS | Admin Command',
+  description: 'Admin management dashboard — NEXUS Command Center',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
