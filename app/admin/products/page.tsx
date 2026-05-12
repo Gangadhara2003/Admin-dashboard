@@ -48,7 +48,7 @@ export default function AdminProductsPage() {
     // --- Shopify Edit Modal ---
     const [isShopifyModalOpen, setIsShopifyModalOpen] = useState(false);
     const [shopifyEditProduct, setShopifyEditProduct] = useState<any>(null);
-    const [shopifyForm, setShopifyForm] = useState({ title: '', description: '', price: '', stock: '', vendor: '', type: '', comparePrice: '', sku: '' });
+    const [shopifyForm, setShopifyForm] = useState({ title: '', description: '', price: '', stock: '', vendor: '', type: '', comparePrice: '', sku: '', variantId: '', option1: '', option2: '', option3: '' });
     const [shopifyImages, setShopifyImages] = useState<string>(''); // comma separated URLs for simplicity
     const [shopifySaving, setShopifySaving] = useState(false);
     const [shopifyError, setShopifyError] = useState('');
@@ -160,7 +160,7 @@ export default function AdminProductsPage() {
 
     const openShopifyCreate = () => {
         setShopifyEditProduct(null);
-        setShopifyForm({ title: '', description: '', price: '', stock: '', vendor: '', type: '', comparePrice: '', sku: '' });
+        setShopifyForm({ title: '', description: '', price: '', stock: '', vendor: '', type: '', comparePrice: '', sku: '', variantId: '', option1: '', option2: '', option3: '' });
         setShopifyImages('');
         setShopifyError('');
         setIsShopifyModalOpen(true);
@@ -169,6 +169,7 @@ export default function AdminProductsPage() {
     const openShopifyEdit = (product: any) => {
         setShopifyEditProduct(product);
         const v = product.variants?.[0] || {};
+        const opts = v.selectedOptions || [];
         setShopifyForm({
             title: product.title || '',
             description: '', // GQL doesn't fetch body_html by default, so leave empty/ignore
@@ -178,6 +179,10 @@ export default function AdminProductsPage() {
             stock: v.inventory_quantity?.toString() || '0',
             vendor: product.vendor || '',
             type: product.product_type || '',
+            variantId: v.id ? String(v.id) : '',
+            option1: opts[0]?.value || '',
+            option2: opts[1]?.value || '',
+            option3: opts[2]?.value || '',
         });
         setShopifyImages((product.images || []).map((img: any) => img.src).join('\n'));
         setShopifyError('');
@@ -189,17 +194,25 @@ export default function AdminProductsPage() {
         setShopifySaving(true);
         setShopifyError('');
         try {
+            const variant: any = {
+                price: shopifyForm.price,
+                compare_at_price: shopifyForm.comparePrice || null,
+                sku: shopifyForm.sku,
+                inventory_quantity: Number(shopifyForm.stock),
+            };
+            if (shopifyEditProduct && shopifyForm.variantId) {
+                variant.id = Number(shopifyForm.variantId);
+                if (shopifyForm.option1) variant.option1 = shopifyForm.option1;
+                if (shopifyForm.option2) variant.option2 = shopifyForm.option2;
+                if (shopifyForm.option3) variant.option3 = shopifyForm.option3;
+            }
+
             const payload: any = {
                 title: shopifyForm.title,
                 description: shopifyForm.description,
                 vendor: shopifyForm.vendor,
                 product_type: shopifyForm.type,
-                variants: [{
-                    price: shopifyForm.price,
-                    compare_at_price: shopifyForm.comparePrice || null,
-                    sku: shopifyForm.sku,
-                    inventory_quantity: Number(shopifyForm.stock),
-                }],
+                variants: [variant],
             };
 
             if (shopifyImages.trim()) {
