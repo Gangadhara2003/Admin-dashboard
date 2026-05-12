@@ -32,7 +32,7 @@ export default function SubmissionDetailModal({ submission, onClose, onApprove, 
             setShopifyVariants(product.variants);
           }
         })
-        .catch(() => {})
+        .catch(() => { })
         .finally(() => setLoadingVariants(false));
     }
   }, [isCatalog, s.shopifyProductId, s.variants?.length]);
@@ -62,16 +62,15 @@ export default function SubmissionDetailModal({ submission, onClose, onApprove, 
   const hasNewVariants = s.variants?.some((v: any) => isNewVariant(v));
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[1000]" onClick={onClose}>
+    <div className="fixed inset-0 bg-black flex items-center justify-center z-[1000]" onClick={onClose}>
       <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto bg-[#111] border-2 border-white/20" onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-white/10">
           <div className="flex items-center gap-2 min-w-0">
-            <span className={`px-2 py-0.5 text-[10px] font-bold uppercase shrink-0 ${
-              s.status === 'approved' ? 'bg-green-500/20 text-green-400' :
-              s.status === 'rejected' ? 'bg-red-500/20 text-red-400' :
-              'bg-yellow-500/20 text-yellow-400'
-            }`}>{s.status}</span>
+            <span className={`px-2 py-0.5 text-[10px] font-bold uppercase shrink-0 ${s.status === 'approved' ? 'bg-green-500/20 text-green-400' :
+                s.status === 'rejected' ? 'bg-red-500/20 text-red-400' :
+                  'bg-yellow-500/20 text-yellow-400'
+              }`}>{s.status}</span>
             <h2 className="text-lg font-bold text-white truncate">{displayName}</h2>
           </div>
           <button onClick={onClose} className="w-8 h-8 flex items-center justify-center hover:bg-white/10 text-white/40 hover:text-white text-xl shrink-0 transition-colors">&times;</button>

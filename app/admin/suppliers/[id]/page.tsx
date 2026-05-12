@@ -294,7 +294,7 @@ export default function SupplierDetailsPage({ params }: { params: Promise<{ id: 
           <p className="text-xs text-amber-700 mt-1">Total Orders</p>
         </div>
         <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4 text-center">
-          <p className="text-2xl font-bold text-indigo-600">{supplierOrders.filter(o => ['accepted','delivery_boy_coming','given_to_delivery','in_transit'].includes(o.status)).length}</p>
+          <p className="text-2xl font-bold text-indigo-600">{supplierOrders.filter(o => ['accepted', 'delivery_boy_coming', 'given_to_delivery', 'in_transit'].includes(o.status)).length}</p>
           <p className="text-xs text-indigo-700 mt-1">In Progress</p>
         </div>
         <div className="bg-teal-50 border border-teal-200 rounded-xl p-4 text-center">
@@ -360,7 +360,7 @@ export default function SupplierDetailsPage({ params }: { params: Promise<{ id: 
           </div>
           <div className="divide-y divide-gray-100">
             {supplierOrders.map((o: any) => {
-              const statusColors: Record<string,string> = {
+              const statusColors: Record<string, string> = {
                 pending: 'bg-gray-50 text-gray-500 border-gray-200',
                 accepted: 'bg-emerald-50 text-emerald-600 border-emerald-100',
                 rejected: 'bg-red-50 text-red-600 border-red-100',
@@ -370,7 +370,7 @@ export default function SupplierDetailsPage({ params }: { params: Promise<{ id: 
                 delivered: 'bg-emerald-50 text-emerald-700 border-emerald-200',
                 completed: 'bg-purple-50 text-purple-600 border-purple-100',
               };
-              const statusLabels: Record<string,string> = {
+              const statusLabels: Record<string, string> = {
                 pending: 'Pending', accepted: 'Accepted', rejected: 'Rejected',
                 delivery_boy_coming: 'Delivery Boy Coming', given_to_delivery: 'Given to Delivery', in_transit: 'In Transit',
                 delivered: 'Delivered', completed: 'Completed',
@@ -443,161 +443,161 @@ export default function SupplierDetailsPage({ params }: { params: Promise<{ id: 
       {/* Products Section */}
       {activeSection === 'products' && (
         <>
-        {/* Supplier Products (Catalog + Custom) */}
-        {supplierProducts.length > 0 && (
-          <div className="bg-white border border-gray-200 rounded-xl shadow-sm mb-6">
-            <div className="p-5 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-800">Supplier Products ({supplierProducts.length})</h2>
-              <p className="text-xs text-gray-400 mt-1">Catalog products added from Shopify and custom submitted products</p>
+          {/* Supplier Products (Catalog + Custom) */}
+          {supplierProducts.length > 0 && (
+            <div className="bg-white border border-gray-200 rounded-xl shadow-sm mb-6">
+              <div className="p-5 border-b border-gray-200">
+                <h2 className="text-lg font-semibold text-gray-800">Supplier Products ({supplierProducts.length})</h2>
+                <p className="text-xs text-gray-400 mt-1">Catalog products added from Shopify and custom submitted products</p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-5">
+                {supplierProducts.map((sp: any) => {
+                  const name = sp.source === 'catalog' ? sp.shopifyTitle : sp.productName;
+                  const image = sp.shopifyImage || sp.productImages?.[0];
+                  const statusMap: Record<string, string> = { approved: 'Approved', pending: 'Pending', rejected: 'Rejected' };
+                  return (
+                    <div key={sp._id} className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-gray-300 transition-all group flex flex-col h-full cursor-pointer" onClick={() => setSpDetail(sp)}>
+                      <div className="relative aspect-[4/3] bg-gray-50 overflow-hidden">
+                        {image ? (
+                          <img src={image} alt={name} className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-gray-300">
+                            <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                          </div>
+                        )}
+                        {sp.productImages && sp.productImages.length > 1 && <span className="absolute top-2 right-2 px-2 py-1 bg-black text-white text-[10px] font-bold rounded-md backdrop-blur-sm">{sp.productImages.length} imgs</span>}
+                      </div>
+                      <div className="p-4 flex flex-col flex-grow">
+                        <h3 className="font-semibold text-gray-800 text-sm leading-tight line-clamp-2 mb-1">{name}</h3>
+                        <div className="flex flex-wrap items-center gap-1.5 mb-2">
+                          <StatusBadge status={statusMap[sp.status] || sp.status} />
+                          <span className={`px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded ${sp.source === 'catalog' ? 'bg-blue-50 text-blue-600' : sp.source === 'bulk_upload' ? 'bg-emerald-50 text-emerald-600' : 'bg-purple-50 text-purple-600'}`}>
+                            {sp.source === 'catalog' ? 'Catalog' : sp.source === 'bulk_upload' ? 'Bulk' : 'Custom'}
+                          </span>
+                          {sp.productCategory && <span className="px-2 py-0.5 text-[10px] font-medium bg-gray-100 text-gray-600 rounded">{sp.productCategory}</span>}
+                        </div>
+
+                        {sp.variants?.length > 0 ? (
+                          <>
+                            <p className="text-[10px] text-gray-400 mb-0.5 mt-auto">{sp.variants[0].title || 'Default'}</p>
+                            <div className="flex items-baseline gap-2 mb-2">
+                              <span className="text-lg font-bold text-gray-900">₹{(sp.variants[0].sellingPrice || 0).toLocaleString('en-IN')}</span>
+                              {sp.variants[0].mrp && sp.variants[0].mrp > sp.variants[0].sellingPrice && (
+                                <span className="text-sm text-gray-400 line-through">₹{sp.variants[0].mrp.toLocaleString('en-IN')}</span>
+                              )}
+                              {sp.variants.length > 1 && (
+                                <span className="text-[10px] text-gray-400">+{sp.variants.length - 1} more</span>
+                              )}
+                            </div>
+                          </>
+                        ) : (
+                          <div className="flex items-baseline gap-2 mb-2 mt-auto">
+                            <span className="text-lg font-bold text-gray-900">₹{(sp.sellingPrice || 0).toLocaleString('en-IN')}</span>
+                            {sp.mrp && sp.mrp > sp.sellingPrice && (
+                              <span className="text-sm text-gray-400 line-through">₹{sp.mrp.toLocaleString('en-IN')}</span>
+                            )}
+                          </div>
+                        )}
+
+                        <div className="flex items-center justify-between mt-1 pt-3 border-t border-gray-100">
+                          {sp.variants?.length > 0 ? (
+                            <span className="px-2 py-0.5 text-[11px] font-semibold rounded-full border bg-blue-50 text-blue-600 border-blue-100">
+                              {sp.variants.length} variant{sp.variants.length > 1 ? 's' : ''}
+                            </span>
+                          ) : (
+                            <span className={`px-2 py-0.5 text-[11px] font-semibold rounded-full border ${(sp.quantity || 0) > 0 ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-red-50 text-red-600 border-red-100'}`}>
+                              {(sp.quantity || 0) > 0 ? `${sp.quantity} in stock` : 'Out of Stock'}
+                            </span>
+                          )}
+                          {sp.skuCode && <span className="text-[10px] font-mono text-gray-400 bg-gray-50 px-1.5 py-0.5 rounded border border-gray-100">{sp.skuCode}</span>}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-5">
-              {supplierProducts.map((sp: any) => {
-                const name = sp.source === 'catalog' ? sp.shopifyTitle : sp.productName;
-                const image = sp.shopifyImage || sp.productImages?.[0];
-                const statusMap: Record<string,string> = { approved: 'Approved', pending: 'Pending', rejected: 'Rejected' };
-                return (
-                  <div key={sp._id} className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-gray-300 transition-all group flex flex-col h-full cursor-pointer" onClick={() => setSpDetail(sp)}>
-                    <div className="relative aspect-[4/3] bg-gray-50 overflow-hidden">
-                      {image ? (
-                        <img src={image} alt={name} className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
+          )}
+
+          {/* Legacy Products (old Product model) */}
+          <div className="bg-white border border-gray-200 rounded-xl shadow-sm">
+            <div className="flex justify-between items-center p-5 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-800">Products ({products.length})</h2>
+              <button onClick={handleExportExcel} className="px-3 py-1.5 text-xs font-medium bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors">
+                Export All (Excel)
+              </button>
+            </div>
+
+            {products.length === 0 ? (
+              <div className="p-12 text-center">
+                <svg className="w-12 h-12 mx-auto text-gray-200 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
+                <p className="text-sm text-gray-400">This supplier has not added any products yet.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-5">
+                {products.map((p: any) => (
+                  <div key={p._id} className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-gray-300 transition-all group flex flex-col h-full">
+                    {/* Product Image */}
+                    <div className="relative aspect-[4/3] bg-gray-50 overflow-hidden cursor-pointer" onClick={() => openEditModal(p)}>
+                      {p.images && p.images.length > 0 ? (
+                        <img src={p.images[0]} alt={p.name} className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-gray-300">
                           <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                         </div>
                       )}
-                      {sp.productImages && sp.productImages.length > 1 && <span className="absolute top-2 right-2 px-2 py-1 bg-black/60 text-white text-[10px] font-bold rounded-md backdrop-blur-sm">{sp.productImages.length} imgs</span>}
-                    </div>
-                    <div className="p-4 flex flex-col flex-grow">
-                      <h3 className="font-semibold text-gray-800 text-sm leading-tight line-clamp-2 mb-1">{name}</h3>
-                      <div className="flex flex-wrap items-center gap-1.5 mb-2">
-                        <StatusBadge status={statusMap[sp.status] || sp.status} />
-                        <span className={`px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded ${sp.source === 'catalog' ? 'bg-blue-50 text-blue-600' : sp.source === 'bulk_upload' ? 'bg-emerald-50 text-emerald-600' : 'bg-purple-50 text-purple-600'}`}>
-                          {sp.source === 'catalog' ? 'Catalog' : sp.source === 'bulk_upload' ? 'Bulk' : 'Custom'}
-                        </span>
-                        {sp.productCategory && <span className="px-2 py-0.5 text-[10px] font-medium bg-gray-100 text-gray-600 rounded">{sp.productCategory}</span>}
-                      </div>
-
-                      {sp.variants?.length > 0 ? (
-                        <>
-                          <p className="text-[10px] text-gray-400 mb-0.5 mt-auto">{sp.variants[0].title || 'Default'}</p>
-                          <div className="flex items-baseline gap-2 mb-2">
-                            <span className="text-lg font-bold text-gray-900">₹{(sp.variants[0].sellingPrice || 0).toLocaleString('en-IN')}</span>
-                            {sp.variants[0].mrp && sp.variants[0].mrp > sp.variants[0].sellingPrice && (
-                              <span className="text-sm text-gray-400 line-through">₹{sp.variants[0].mrp.toLocaleString('en-IN')}</span>
-                            )}
-                            {sp.variants.length > 1 && (
-                              <span className="text-[10px] text-gray-400">+{sp.variants.length - 1} more</span>
-                            )}
-                          </div>
-                        </>
-                      ) : (
-                        <div className="flex items-baseline gap-2 mb-2 mt-auto">
-                          <span className="text-lg font-bold text-gray-900">₹{(sp.sellingPrice || 0).toLocaleString('en-IN')}</span>
-                          {sp.mrp && sp.mrp > sp.sellingPrice && (
-                            <span className="text-sm text-gray-400 line-through">₹{sp.mrp.toLocaleString('en-IN')}</span>
-                          )}
-                        </div>
+                      {p.images && p.images.length > 1 && (
+                        <span className="absolute top-2 right-2 bg-black text-white text-[10px] font-bold px-2 py-1 rounded-md backdrop-blur-sm">{p.images.length} imgs</span>
                       )}
+                      <div className="absolute top-2 left-2">
+                        <StatusBadge status={p.isAvailable && p.stock > 0 ? 'In Stock' : 'Out of Stock'} />
+                      </div>
+                    </div>
 
-                      <div className="flex items-center justify-between mt-1 pt-3 border-t border-gray-100">
-                        {sp.variants?.length > 0 ? (
-                          <span className="px-2 py-0.5 text-[11px] font-semibold rounded-full border bg-blue-50 text-blue-600 border-blue-100">
-                            {sp.variants.length} variant{sp.variants.length > 1 ? 's' : ''}
-                          </span>
-                        ) : (
-                          <span className={`px-2 py-0.5 text-[11px] font-semibold rounded-full border ${(sp.quantity || 0) > 0 ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-red-50 text-red-600 border-red-100'}`}>
-                            {(sp.quantity || 0) > 0 ? `${sp.quantity} in stock` : 'Out of Stock'}
-                          </span>
-                        )}
-                        {sp.skuCode && <span className="text-[10px] font-mono text-gray-400 bg-gray-50 px-1.5 py-0.5 rounded border border-gray-100">{sp.skuCode}</span>}
+                    {/* Product Info */}
+                    <div className="p-4 flex flex-col flex-grow">
+                      <h3 className="font-semibold text-gray-800 text-sm leading-tight line-clamp-2 mb-2 cursor-pointer" onClick={() => openEditModal(p)}>{p.name}</h3>
+                      <div className="flex flex-wrap items-center gap-1.5 mb-2">
+                        {p.category && <span className="text-[11px] text-blue-500 bg-blue-50 px-1.5 py-0.5 rounded">{p.category}</span>}
+                      </div>
+
+                      <div className="flex items-baseline gap-2 mb-2 mt-auto">
+                        <span className="text-lg font-bold text-gray-900">₹{p.price?.toLocaleString()}</span>
+                        <span className="text-[11px] text-gray-400">/ {p.unit || 'pcs'}</span>
+                      </div>
+
+                      <div className="flex items-center justify-between mb-3">
+                        <span className={`px-2 py-0.5 text-[11px] font-semibold rounded-full border ${p.isAvailable && p.stock > 0 ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-red-50 text-red-600 border-red-100'}`}>
+                          {p.isAvailable && p.stock > 0 ? `${p.stock} in stock` : 'Out of Stock'}
+                        </span>
+                      </div>
+
+                      {/* Product Actions */}
+                      <div className="flex gap-2 pt-3 border-t border-gray-100 mt-auto">
+                        <button onClick={() => openEditModal(p)} className="flex-1 px-3 py-1.5 text-xs bg-blue-50 text-blue-600 rounded-lg font-medium hover:bg-blue-100 transition-colors text-center">
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => p.images && p.images.length > 1 ? handleDownloadAllImages(p) : (p.images && p.images.length > 0 ? handleDownload(p.images[0], `${p.name}.jpg`) : null)}
+                          disabled={!p.images || p.images.length === 0}
+                          className="px-3 py-1.5 text-xs text-gray-600 bg-gray-50 border border-gray-200 rounded-lg font-medium hover:bg-gray-100 transition-colors disabled:opacity-40 flex items-center justify-center gap-1"
+                          title="Download Image(s)"
+                        >
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                        </button>
+                        <button onClick={() => handleExportSingleProduct(p)} className="px-3 py-1.5 text-xs text-gray-600 bg-gray-50 border border-gray-200 rounded-lg font-medium hover:bg-gray-100 transition-colors flex items-center justify-center" title="Export Excel">
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                        </button>
+                        <button onClick={() => handleDeleteProduct(p._id)} className="px-3 py-1.5 text-xs bg-red-50 text-red-600 rounded-lg font-medium hover:bg-red-100 transition-colors flex items-center justify-center">
+                          Delete
+                        </button>
                       </div>
                     </div>
                   </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Legacy Products (old Product model) */}
-      <div className="bg-white border border-gray-200 rounded-xl shadow-sm">
-        <div className="flex justify-between items-center p-5 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-800">Products ({products.length})</h2>
-          <button onClick={handleExportExcel} className="px-3 py-1.5 text-xs font-medium bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors">
-            Export All (Excel)
-          </button>
-        </div>
-
-        {products.length === 0 ? (
-          <div className="p-12 text-center">
-            <svg className="w-12 h-12 mx-auto text-gray-200 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
-            <p className="text-sm text-gray-400">This supplier has not added any products yet.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-5">
-            {products.map((p: any) => (
-              <div key={p._id} className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:border-gray-300 transition-all group flex flex-col h-full">
-                {/* Product Image */}
-                <div className="relative aspect-[4/3] bg-gray-50 overflow-hidden cursor-pointer" onClick={() => openEditModal(p)}>
-                  {p.images && p.images.length > 0 ? (
-                    <img src={p.images[0]} alt={p.name} className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300" />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-300">
-                      <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                    </div>
-                  )}
-                  {p.images && p.images.length > 1 && (
-                    <span className="absolute top-2 right-2 bg-black/60 text-white text-[10px] font-bold px-2 py-1 rounded-md backdrop-blur-sm">{p.images.length} imgs</span>
-                  )}
-                  <div className="absolute top-2 left-2">
-                    <StatusBadge status={p.isAvailable && p.stock > 0 ? 'In Stock' : 'Out of Stock'} />
-                  </div>
-                </div>
-
-                {/* Product Info */}
-                <div className="p-4 flex flex-col flex-grow">
-                  <h3 className="font-semibold text-gray-800 text-sm leading-tight line-clamp-2 mb-2 cursor-pointer" onClick={() => openEditModal(p)}>{p.name}</h3>
-                  <div className="flex flex-wrap items-center gap-1.5 mb-2">
-                    {p.category && <span className="text-[11px] text-blue-500 bg-blue-50 px-1.5 py-0.5 rounded">{p.category}</span>}
-                  </div>
-
-                  <div className="flex items-baseline gap-2 mb-2 mt-auto">
-                    <span className="text-lg font-bold text-gray-900">₹{p.price?.toLocaleString()}</span>
-                    <span className="text-[11px] text-gray-400">/ {p.unit || 'pcs'}</span>
-                  </div>
-
-                  <div className="flex items-center justify-between mb-3">
-                    <span className={`px-2 py-0.5 text-[11px] font-semibold rounded-full border ${p.isAvailable && p.stock > 0 ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-red-50 text-red-600 border-red-100'}`}>
-                      {p.isAvailable && p.stock > 0 ? `${p.stock} in stock` : 'Out of Stock'}
-                    </span>
-                  </div>
-
-                  {/* Product Actions */}
-                  <div className="flex gap-2 pt-3 border-t border-gray-100 mt-auto">
-                    <button onClick={() => openEditModal(p)} className="flex-1 px-3 py-1.5 text-xs bg-blue-50 text-blue-600 rounded-lg font-medium hover:bg-blue-100 transition-colors text-center">
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => p.images && p.images.length > 1 ? handleDownloadAllImages(p) : (p.images && p.images.length > 0 ? handleDownload(p.images[0], `${p.name}.jpg`) : null)}
-                      disabled={!p.images || p.images.length === 0}
-                      className="px-3 py-1.5 text-xs text-gray-600 bg-gray-50 border border-gray-200 rounded-lg font-medium hover:bg-gray-100 transition-colors disabled:opacity-40 flex items-center justify-center gap-1"
-                      title="Download Image(s)"
-                    >
-                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                    </button>
-                    <button onClick={() => handleExportSingleProduct(p)} className="px-3 py-1.5 text-xs text-gray-600 bg-gray-50 border border-gray-200 rounded-lg font-medium hover:bg-gray-100 transition-colors flex items-center justify-center" title="Export Excel">
-                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                    </button>
-                    <button onClick={() => handleDeleteProduct(p._id)} className="px-3 py-1.5 text-xs bg-red-50 text-red-600 rounded-lg font-medium hover:bg-red-100 transition-colors flex items-center justify-center">
-                      Delete
-                    </button>
-                  </div>
-                </div>
+                ))}
               </div>
-            ))}
+            )}
           </div>
-        )}
-      </div>
         </>
       )}
 
@@ -612,17 +612,17 @@ export default function SupplierDetailsPage({ params }: { params: Promise<{ id: 
             {supplierError && <div className="text-red-500 text-sm mb-4 bg-red-50 p-3 rounded-lg">{supplierError}</div>}
             <form onSubmit={handleSaveSupplier}>
               <div className="grid grid-cols-2 gap-4">
-                <div><label className={labelClass}>Representative Name *</label><input required type="text" className={inputClass} value={supplierFormData.name} onChange={e => setSupplierFormData({...supplierFormData, name: e.target.value})} /></div>
-                <div><label className={labelClass}>Business / Shop Name *</label><input required type="text" className={inputClass} value={supplierFormData.businessName} onChange={e => setSupplierFormData({...supplierFormData, businessName: e.target.value})} /></div>
-                <div><label className={labelClass}>Login Phone *</label><input required type="tel" className={inputClass} value={supplierFormData.phone} onChange={e => setSupplierFormData({...supplierFormData, phone: e.target.value})} /></div>
-                <div><label className={labelClass}>Password (blank = keep)</label><input type="text" className={inputClass} value={supplierFormData.password} onChange={e => setSupplierFormData({...supplierFormData, password: e.target.value})} /></div>
+                <div><label className={labelClass}>Representative Name *</label><input required type="text" className={inputClass} value={supplierFormData.name} onChange={e => setSupplierFormData({ ...supplierFormData, name: e.target.value })} /></div>
+                <div><label className={labelClass}>Business / Shop Name *</label><input required type="text" className={inputClass} value={supplierFormData.businessName} onChange={e => setSupplierFormData({ ...supplierFormData, businessName: e.target.value })} /></div>
+                <div><label className={labelClass}>Login Phone *</label><input required type="tel" className={inputClass} value={supplierFormData.phone} onChange={e => setSupplierFormData({ ...supplierFormData, phone: e.target.value })} /></div>
+                <div><label className={labelClass}>Password (blank = keep)</label><input type="text" className={inputClass} value={supplierFormData.password} onChange={e => setSupplierFormData({ ...supplierFormData, password: e.target.value })} /></div>
               </div>
-              <div className="mt-4"><label className={labelClass}>Email</label><input type="email" className={inputClass} value={supplierFormData.email} onChange={e => setSupplierFormData({...supplierFormData, email: e.target.value})} /></div>
-              <div className="mt-4"><label className={labelClass}>Address *</label><textarea required className={inputClass} rows={2} value={supplierFormData.address} onChange={e => setSupplierFormData({...supplierFormData, address: e.target.value})} /></div>
+              <div className="mt-4"><label className={labelClass}>Email</label><input type="email" className={inputClass} value={supplierFormData.email} onChange={e => setSupplierFormData({ ...supplierFormData, email: e.target.value })} /></div>
+              <div className="mt-4"><label className={labelClass}>Address *</label><textarea required className={inputClass} rows={2} value={supplierFormData.address} onChange={e => setSupplierFormData({ ...supplierFormData, address: e.target.value })} /></div>
               <div className="grid grid-cols-3 gap-4 mt-4">
-                <div><label className={labelClass}>City</label><input type="text" className={inputClass} value={supplierFormData.city} onChange={e => setSupplierFormData({...supplierFormData, city: e.target.value})} /></div>
-                <div><label className={labelClass}>State</label><input type="text" className={inputClass} value={supplierFormData.state} onChange={e => setSupplierFormData({...supplierFormData, state: e.target.value})} /></div>
-                <div><label className={labelClass}>Pincode</label><input type="text" className={inputClass} value={supplierFormData.pincode} onChange={e => setSupplierFormData({...supplierFormData, pincode: e.target.value})} /></div>
+                <div><label className={labelClass}>City</label><input type="text" className={inputClass} value={supplierFormData.city} onChange={e => setSupplierFormData({ ...supplierFormData, city: e.target.value })} /></div>
+                <div><label className={labelClass}>State</label><input type="text" className={inputClass} value={supplierFormData.state} onChange={e => setSupplierFormData({ ...supplierFormData, state: e.target.value })} /></div>
+                <div><label className={labelClass}>Pincode</label><input type="text" className={inputClass} value={supplierFormData.pincode} onChange={e => setSupplierFormData({ ...supplierFormData, pincode: e.target.value })} /></div>
               </div>
               <div className="flex justify-end gap-2 mt-6 pt-4 border-t border-gray-200">
                 <button type="button" className="px-5 py-2.5 bg-white border border-gray-200 text-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all" onClick={() => setIsEditSupplierOpen(false)}>Cancel</button>
@@ -795,17 +795,17 @@ export default function SupplierDetailsPage({ params }: { params: Promise<{ id: 
             </div>
             {error && <div className="text-red-500 text-sm mb-4 bg-red-50 p-3 rounded-lg">{error}</div>}
             <form onSubmit={handleSave}>
-              <div><label className={labelClass}>Product Name *</label><input required type="text" className={inputClass} value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} /></div>
+              <div><label className={labelClass}>Product Name *</label><input required type="text" className={inputClass} value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} /></div>
               <div className="grid grid-cols-2 gap-4 mt-4">
-                <div><label className={labelClass}>Price (₹) *</label><input required min="0" step="0.01" type="number" className={inputClass} value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} /></div>
-                <div><label className={labelClass}>Stock Quantity *</label><input required min="0" type="number" className={inputClass} value={formData.stock} onChange={e => setFormData({...formData, stock: e.target.value})} /></div>
+                <div><label className={labelClass}>Price (₹) *</label><input required min="0" step="0.01" type="number" className={inputClass} value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} /></div>
+                <div><label className={labelClass}>Stock Quantity *</label><input required min="0" type="number" className={inputClass} value={formData.stock} onChange={e => setFormData({ ...formData, stock: e.target.value })} /></div>
               </div>
               <div className="grid grid-cols-2 gap-4 mt-4">
-                <div><label className={labelClass}>Unit</label><input type="text" className={inputClass} placeholder="e.g. pcs, kg, boxes" value={formData.unit} onChange={e => setFormData({...formData, unit: e.target.value})} /></div>
-                <div><label className={labelClass}>Category</label><input type="text" className={inputClass} value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} /></div>
+                <div><label className={labelClass}>Unit</label><input type="text" className={inputClass} placeholder="e.g. pcs, kg, boxes" value={formData.unit} onChange={e => setFormData({ ...formData, unit: e.target.value })} /></div>
+                <div><label className={labelClass}>Category</label><input type="text" className={inputClass} value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })} /></div>
               </div>
-              <div className="mt-4"><label className={labelClass}>Description</label><textarea className={inputClass} rows={3} value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} /></div>
-              <div className="mt-4"><label className={labelClass}>Status</label><select className={inputClass} value={formData.isAvailable ? 'true' : 'false'} onChange={e => setFormData({...formData, isAvailable: e.target.value === 'true'})}><option value="true">Available</option><option value="false">Unavailable</option></select></div>
+              <div className="mt-4"><label className={labelClass}>Description</label><textarea className={inputClass} rows={3} value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} /></div>
+              <div className="mt-4"><label className={labelClass}>Status</label><select className={inputClass} value={formData.isAvailable ? 'true' : 'false'} onChange={e => setFormData({ ...formData, isAvailable: e.target.value === 'true' })}><option value="true">Available</option><option value="false">Unavailable</option></select></div>
 
               {/* Product Images */}
               <div className="mt-4 pt-4 border-t border-gray-200">
@@ -823,7 +823,7 @@ export default function SupplierDetailsPage({ params }: { params: Promise<{ id: 
                     <div key={index} className="relative">
                       <img src={img.url} alt={`preview ${index}`} className="w-full aspect-square rounded-lg object-cover border border-gray-200" />
                       {!img.isNew && (
-                        <button type="button" className="absolute top-1 right-8 bg-black/60 text-white rounded-full w-6 h-6 flex items-center justify-center cursor-pointer text-sm border-none hover:bg-blue-500 transition-all" onClick={() => handleDownload(img.url, `${formData.name || 'product'}-${index}.jpg`)}>
+                        <button type="button" className="absolute top-1 right-8 bg-black text-white rounded-full w-6 h-6 flex items-center justify-center cursor-pointer text-sm border-none hover:bg-blue-500 transition-all" onClick={() => handleDownload(img.url, `${formData.name || 'product'}-${index}.jpg`)}>
                           <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                         </button>
                       )}

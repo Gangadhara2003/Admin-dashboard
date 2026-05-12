@@ -20,12 +20,14 @@ async function dbConnect() {
   if (!cached.promise) {
     const opts = { bufferCommands: false };
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => mongoose);
+    console.log("dbConnect", MONGODB_URI);
   }
 
   try {
     cached.conn = await cached.promise;
   } catch (e) {
     cached.promise = null;
+    console.log("dbConnect error", e);
     throw e;
   }
 

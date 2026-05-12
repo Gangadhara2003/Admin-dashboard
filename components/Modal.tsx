@@ -22,7 +22,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md', f
 
   return (
     <div
-      className="fixed inset-0 bg-black/60 flex items-center justify-center z-[1000] animate-fadeIn"
+      className="fixed inset-0 bg-black flex items-center justify-center z-[1000] animate-fadeIn"
       onClick={() => !disableClose && onClose()}
     >
       <div
